@@ -11,14 +11,6 @@ describe Oystercard do
     subject.top_up(5)
     expect(subject.balance).to eq 5
   end
-  it 'Can Deduct' do
-    expect(subject).to respond_to(:deduct).with(1).argument
-  end
-  it 'Deducts the amount provided' do
-    subject.top_up(10)
-    subject.deduct(5)
-    expect(subject.balance).to eq 5
-  end
 
   context "when the limit balance is reached" do
   it 'it can not have a balance greater than £90' do
@@ -40,16 +32,27 @@ describe Oystercard do
         expect(subject.in_journey?).to eq false
       end
       it "can touch in" do
+        subject.top_up(Oystercard::MINIMUM+1)
         expect(subject.respond_to? :touch_in).to eq true
       end
       it "does touch in" do
+        subject.top_up(Oystercard::MINIMUM+1)
         subject.touch_in
         expect(subject.in_use).to eq true
       end
       it "does touch out" do
+        subject.top_up(Oystercard::MINIMUM+1)
         subject.touch_in
         subject.touch_out
         expect(subject.in_use).to eq false
+      end
+      it "can't touch in without minimum balance" do
+        expect{subject.touch_in}.to raise_error("Balance below minimum")
+      end
+      it "reduces balance by minimum fare on touch out" do
+        subject.top_up(Oystercard::MINIMUM)
+        subject.touch_in
+        expect{subject.touch_out}.to change{subject.balance}.by(-Oystercard::MINIMUM)
       end
     end
   end
