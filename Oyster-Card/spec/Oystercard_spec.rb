@@ -12,4 +12,16 @@ describe Oystercard do
     expect(subject.balance).to eq 5
   end
 
+  context "when the limit balance is reached" do
+  it 'it can not have a balance greater than £90' do
+    subject.top_up(Oystercard::LIMIT)
+    expect{subject.top_up(1)}.to raise_error "The balance has a limit of £#{Oystercard::LIMIT}"
+  end
+
+  it 'has working above_limit? method' do
+    subject.top_up(Oystercard::LIMIT)
+    expect(subject.above_limit?(Oystercard::LIMIT)).to eq true
+  end
+
+end
 end
