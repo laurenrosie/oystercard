@@ -12,7 +12,13 @@ class Oystercard
     self.balance = self.balance + amount
   end
 
+  def deduct(amount)
+    self.balance= self.balance - amount
+  end
+
   def above_limit?(amount)
     self.balance + amount > LIMIT
   end
+
+
 end

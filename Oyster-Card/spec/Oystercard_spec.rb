@@ -11,6 +11,14 @@ describe Oystercard do
     subject.top_up(5)
     expect(subject.balance).to eq 5
   end
+  it 'Can Deduct' do
+    expect(subject).to respond_to(:deduct).with(1).argument
+  end
+  it 'Deducts the amount provided' do
+    subject.top_up(10)
+    subject.deduct(5)
+    expect(subject.balance).to eq 5
+  end
 
   context "when the limit balance is reached" do
   it 'it can not have a balance greater than £90' do
