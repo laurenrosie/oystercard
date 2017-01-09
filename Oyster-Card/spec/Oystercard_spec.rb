@@ -31,5 +31,28 @@ describe Oystercard do
     expect(subject.above_limit?(Oystercard::LIMIT)).to eq true
   end
 
+  context "when using a card" do
+    describe "touching in and out" do
+      it "responds to in_journey? quesiton" do
+        expect(subject.respond_to? :in_journey?). to eq true
+      end
+      it "correctly checks if in_journey?" do
+        expect(subject.in_journey?).to eq false
+      end
+      it "can touch in" do
+        expect(subject.respond_to? :touch_in).to eq true
+      end
+      it "does touch in" do
+        subject.touch_in
+        expect(subject.in_use).to eq true
+      end
+      it "does touch out" do
+        subject.touch_in
+        subject.touch_out
+        expect(subject.in_use).to eq false
+      end
+    end
+  end
+
 end
 end
